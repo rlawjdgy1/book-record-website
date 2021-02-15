@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <br>
+    <div class="card">
+        <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="{{ book.image }}" alt="{{ book.name }}" class="img-fluid">
+            </div>
+            <div class="col-md-8">
+                <h3 class="text-center">
+                    {{ book.name }}
+                </h3>
+                <p>{{ book.description }}</p>
+                <h5>Writer: {{ book.writer }}</h5>
+                <h5>Rating : {{ book.averageRating }}</h5>
+                <a href="{% url 'main:edit_books' book.id %}" class="btn btn-warning">책 정보 수정하기</a>
+                <a href="{% url 'main:delete_book' book.id %}" class="btn btn-danger">책 정보 삭제하기</a>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+{% endblock %}
