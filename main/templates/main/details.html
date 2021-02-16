@@ -17,8 +17,13 @@
                 <p>{{ book.description }}</p>
                 <h5>Writer: {{ book.writer }}</h5>
                 <h5>Rating : {{ book.averageRating }}</h5>
+
+                {% if request.user.is_authenticated %}
+                    {% if request.user.is_superuser %}
                 <a href="{% url 'main:edit_books' book.id %}" class="btn btn-warning">책 정보 수정하기</a>
                 <a href="{% url 'main:delete_book' book.id %}" class="btn btn-danger">책 정보 삭제하기</a>
+                    {% endif %}
+                {% endif %}
             </div>
         </div>
     </div>
