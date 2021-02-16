@@ -16,17 +16,62 @@
                 </h3>
                 <p>{{ book.description }}</p>
                 <h5>Writer: {{ book.writer }}</h5>
-                <h5>Rating : {{ book.averageRating }}</h5>
+                <h5>Rating : {{ average }}/10</h5>
 
                 {% if request.user.is_authenticated %}
                     {% if request.user.is_superuser %}
                 <a href="{% url 'main:edit_books' book.id %}" class="btn btn-warning">책 정보 수정하기</a>
-                <a href="{% url 'main:delete_book' book.id %}" class="btn btn-danger">책 정보 삭제하기</a>
+                <a href="{% url 'main:delete_book' book.id %}" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">책 정보 삭제하기</a>
                     {% endif %}
                 {% endif %}
             </div>
         </div>
     </div>
+    </div>
+
+    <br>
+    <div class="card">
+        <div class="card-body">
+            <h3 class="text-center">리뷰 남기기</h3>
+            <form action="{% url 'main:add_review' book.id %}" method="POST">
+                {% csrf_token %}
+                <label for="comment">리뷰</label>
+                <textarea name="comment" id="comment" cols="30" rows="5" class="form-control"></textarea>
+
+                <label for="rating">별점</label>
+                <input type="range" id="rangeInput"
+                    name="rating" min="0" max="10" value="0" step="0.5"
+                    oninput="amount.value=rangeInput.value">
+
+                <output name="amount" id="amount" for="rangeInput">0</output>
+                <br>
+                <input type="submit" class="btn btn-danger" value="리뷰 남기기">
+            </form>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-body">
+            <h3 class="text-center">리뷰 보기</h3>
+            {% for review in reviews %}
+                <div class="card" style="background-color: #f5eeee;">
+                    <div class="row">
+                        <div class="col md 3">
+                            <h5 class="text-left">{{ user.username }}</h5>
+                            <h5>{{ review.rating }}</h5>
+                            {% if request.user == review.user %}
+                            <a href="{% url 'main:edit_review' book.id review.id %}">수정</a>
+                            <a href="{% url 'main:delete_review' book.id review.id %}" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+                            {% endif %}
+                        </div>
+                        <div class="col md 9">
+                            <p>{{ review.comment }}</p>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            {% endfor %}  
+        </div>
     </div>
 </div>
 
